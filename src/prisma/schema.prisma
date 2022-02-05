@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../../data/twitter_tools.db"
+}
+
+model Tweet {
+  id     String  @id
+  text   String
+  userId String  @map("user_id")
+  user   User    @relation(fields: [userId], references: [id])
+  media  Media[]
+
+  @@map("tweets")
+}
+
+model User {
+  id    String  @id
+  name  String
+  tweet Tweet[]
+
+  @@map("users")
+}
+
+model Media {
+  id      String @id
+  url     String
+  tweetId String @map("tweet_id")
+  tweet   Tweet  @relation(fields: [tweetId], references: [id])
+}
