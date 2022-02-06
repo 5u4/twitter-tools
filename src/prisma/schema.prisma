@@ -34,3 +34,9 @@ model Media {
   tweetId String @map("tweet_id")
   tweet   Tweet  @relation(fields: [tweetId], references: [id])
 }
+
+model Following {
+  id String @id
+
+  @@map("followings")
+}

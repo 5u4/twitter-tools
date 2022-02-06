@@ -1,10 +1,12 @@
 import prompts from "prompts";
 import { downloadAllMedia } from "./cmd/downloadAllMedia";
+import { downloadFollowings } from "./cmd/downloadFollowings";
 import { downloadTweets } from "./cmd/downloadTweets";
 
 enum CmdAction {
   DownloadTweets,
   DownloadMedia,
+  DownloadFollowings,
 }
 
 const main = async () => {
@@ -24,6 +26,11 @@ const main = async () => {
           description: "Download all media data to resource folder",
           value: CmdAction.DownloadMedia,
         },
+        {
+          title: "download followings",
+          description: "Download all followings to database",
+          value: CmdAction.DownloadFollowings,
+        },
       ],
     },
   ]);
@@ -33,6 +40,8 @@ const main = async () => {
       return downloadTweets();
     case CmdAction.DownloadMedia:
       return downloadAllMedia();
+    case CmdAction.DownloadFollowings:
+      return downloadFollowings();
     default:
       throw Error("Invalid command");
   }
