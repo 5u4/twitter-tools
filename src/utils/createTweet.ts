@@ -17,9 +17,8 @@ export const createTweet = async (prisma: PrismaClient, tweet: TweetV1) => {
       },
     }));
 
-  return prisma.tweet.upsert({
-    where: { id: sourceTweet.id_str },
-    create: {
+  return prisma.tweet.create({
+    data: {
       id: sourceTweet.id_str,
       text: sourceTweet?.full_text ?? sourceTweet?.text,
       user: {
@@ -40,6 +39,5 @@ export const createTweet = async (prisma: PrismaClient, tweet: TweetV1) => {
         ],
       },
     },
-    update: {},
   });
 };

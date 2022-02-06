@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@lvksh/logger": "^1.6.2",
+    "@open-draft/until": "^1.0.3",
     "@prisma/client": "^3.9.1",
     "@types/prompts": "^2.0.14",
     "chalk": "^4",

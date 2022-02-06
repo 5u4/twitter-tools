@@ -11,6 +11,7 @@ const fileConfig: FileLoggerConfig = {
 
 const methodConfig = {
   info: { label: chalk.cyan`[INFO]`, newLine: "", newLineEnd: "\n" },
+  error: { label: chalk.redBright`[ERROR]`, newLine: "", newLineEnd: "\n" },
 };
 
 export const logger = createLogger(methodConfig, { padding: "PREPEND" }, [

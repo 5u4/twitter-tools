@@ -19,6 +19,11 @@
   resolved "https://registry.yarnpkg.com/@lvksh/logger/-/logger-1.6.2.tgz#1fe9ee9104415051fdfe214ec8f4ef78f9ba5ead"
   integrity sha512-GXbRtCq2LoTKRZeoRX0/9Byafo6V2roglj1/j9zSxUNPfhWlwSveQLgcfZ1mxMEZ2xh03MlGSlGyH/GNmaLYOw==
 
+"@open-draft/until@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
+  integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
+
 "@prisma/client@^3.9.1":
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-3.9.1.tgz#565c8121f1220637bcab4a1d1f106b8c1334406c"

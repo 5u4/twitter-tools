@@ -1,10 +1,10 @@
 import prompts from "prompts";
 import { downloadAllMedia } from "./cmd/downloadAllMedia";
-import { seed } from "./cmd/seed";
+import { downloadTweets } from "./cmd/downloadTweets";
 
 enum CmdAction {
-  Seed,
-  Download,
+  DownloadTweets,
+  DownloadMedia,
 }
 
 const main = async () => {
@@ -14,20 +14,24 @@ const main = async () => {
       name: "cmd",
       message: "Select your command action",
       choices: [
-        { title: "seed", description: "Seed an fresh empty database", value: CmdAction.Seed },
         {
-          title: "download",
+          title: "download tweets",
+          description: "Download latest tweets",
+          value: CmdAction.DownloadTweets,
+        },
+        {
+          title: "download media",
           description: "Download all media data to resource folder",
-          value: CmdAction.Download,
+          value: CmdAction.DownloadMedia,
         },
       ],
     },
   ]);
 
   switch (resp.cmd) {
-    case CmdAction.Seed:
-      return seed();
-    case CmdAction.Download:
+    case CmdAction.DownloadTweets:
+      return downloadTweets();
+    case CmdAction.DownloadMedia:
       return downloadAllMedia();
     default:
       throw Error("Invalid command");
