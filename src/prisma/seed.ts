@@ -5,7 +5,7 @@ import { prisma } from "../prisma/client";
 const main = async () => {
   logger.info("start seeding ...");
 
-  await downloadTweets();
+  await downloadTweets({});
 };
 
 main()

@@ -1,7 +1,7 @@
 import { Media, User } from "@prisma/client";
 import path from "path";
 
-export const resourcePath = (media: Media, user: User) => {
+export const resourcePath = (media: Media, user: Pick<User, "id" | "name">) => {
   const foldername = `${sanitizePath(user.name)}-${user.id}`;
   const filename = `${media.tweetId}-${media.id}${path.extname(media.url)}`.split("?")[0];
   return path.resolve(__dirname, "..", "..", "data", "res", foldername, filename);

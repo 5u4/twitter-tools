@@ -5,7 +5,7 @@ import path from "path";
 import { prisma } from "../prisma/client";
 import { resourcePath } from "./resourcePath";
 
-export const saveMedia = async (media: Media, user?: User | undefined) => {
+export const saveMedia = async (media: Media, user?: Pick<User, "id" | "name"> | undefined) => {
   if (!user) {
     const tweet = await prisma.tweet.findFirst({
       where: { id: media.tweetId },

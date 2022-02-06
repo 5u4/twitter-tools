@@ -7,6 +7,7 @@ enum CmdAction {
   DownloadTweets,
   DownloadMedia,
   DownloadFollowings,
+  DownloadUserTimeline,
 }
 
 const main = async () => {
@@ -31,17 +32,31 @@ const main = async () => {
           description: "Download all followings to database",
           value: CmdAction.DownloadFollowings,
         },
+        {
+          title: "download user timeline",
+          description: "Download a specific user timeline",
+          value: CmdAction.DownloadUserTimeline,
+        },
       ],
+    },
+    {
+      type: prev => (prev === CmdAction.DownloadUserTimeline ? "text" : null),
+      name: "userIdForTimeline",
+      message: "Enter the user id for fetching timeline",
     },
   ]);
 
   switch (resp.cmd) {
     case CmdAction.DownloadTweets:
-      return downloadTweets();
+      return downloadTweets({});
     case CmdAction.DownloadMedia:
       return downloadAllMedia();
     case CmdAction.DownloadFollowings:
       return downloadFollowings();
+    case CmdAction.DownloadUserTimeline:
+      const id = resp.userIdForTimeline;
+      if (!id) throw Error("Missing user id");
+      return downloadTweets({ id, ignoreDuplicate: true });
     default:
       throw Error("Invalid command");
   }

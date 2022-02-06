@@ -4,10 +4,15 @@ import { prisma } from "../prisma/client";
 import { twitter } from "../twitter/client";
 import { createTweet } from "../utils/createTweet";
 
-export const downloadTweets = async () => {
-  const user = await twitter.currentUser();
+export type DownloadTweetsPayload = {
+  id?: string | undefined;
+  ignoreDuplicate?: boolean | undefined;
+};
 
-  let timeline = await twitter.v1.userTimeline(user.id_str, {
+export const downloadTweets = async (payload: DownloadTweetsPayload) => {
+  const id = payload.id ?? (await twitter.currentUser()).id_str;
+
+  let timeline = await twitter.v1.userTimeline(id, {
     exclude_replies: true,
     trim_user: false,
   });
@@ -32,15 +37,15 @@ export const downloadTweets = async () => {
 
       const [error, result] = await until(() => createTweet(prisma, tweet));
 
-      if (error) {
+      if (error && !payload.ignoreDuplicate) {
         logger.error(error);
         return;
       }
 
-      logger.info(`inserted ${result.id}`);
+      if (!error) logger.info(`inserted ${result.id}`);
     }
 
-    if (existingIds.size > 0) {
+    if (existingIds.size > 0 && !payload.ignoreDuplicate) {
       logger.info(`stopped since existing id in db has found`);
       return;
     }

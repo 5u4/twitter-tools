@@ -21,9 +21,10 @@ model Tweet {
 }
 
 model User {
-  id    String  @id
-  name  String
-  tweet Tweet[]
+  id        String   @id
+  name      String
+  tweet     Tweet[]
+  following Boolean? @default(false)
 
   @@map("users")
 }
@@ -33,10 +34,4 @@ model Media {
   url     String
   tweetId String @map("tweet_id")
   tweet   Tweet  @relation(fields: [tweetId], references: [id])
-}
-
-model Following {
-  id String @id
-
-  @@map("followings")
 }
