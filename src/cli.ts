@@ -30,24 +30,30 @@ const cmd = command({
       type: boolean,
       description: "download all monitored user timeline",
     }),
+    all: flag({
+      long: "all",
+      short: "a",
+      type: boolean,
+      description: "download everything available",
+    }),
   },
   handler: async args => {
-    if (args.followings) {
+    if (args.followings || args.all) {
       logger.info("downloading followings");
       await downloadFollowings();
     }
 
-    if (args.monitored) {
+    if (args.monitored || args.all) {
       logger.info("downloading monitored user tweets");
       for (const id of monitoredUserIds) await downloadTweets({ id, ignoreDuplicate: true });
     }
 
-    if (args.tweets) {
+    if (args.tweets || args.all) {
       logger.info("downloading timeline tweets");
       await downloadTweets({});
     }
 
-    if (args.media) {
+    if (args.media || args.all) {
       logger.info("downloading media");
       await downloadAllMedia();
     }
