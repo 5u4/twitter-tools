@@ -7,3 +7,5 @@ export const twitterApiTokens: TwitterApiTokens = {
   accessToken: process.env.ACCESS_KEY!,
   accessSecret: process.env.ACCESS_SECRET!,
 };
+
+export const monitoredUserIds: string[] = process.env.MONITORED_USERS?.split(",") ?? [];

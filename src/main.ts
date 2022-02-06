@@ -2,12 +2,14 @@ import prompts from "prompts";
 import { downloadAllMedia } from "./cmd/downloadAllMedia";
 import { downloadFollowings } from "./cmd/downloadFollowings";
 import { downloadTweets } from "./cmd/downloadTweets";
+import { monitoredUserIds } from "./config";
 
 enum CmdAction {
   DownloadTweets,
   DownloadMedia,
   DownloadFollowings,
   DownloadUserTimeline,
+  DownloadMonitoredTimeline,
 }
 
 const main = async () => {
@@ -33,9 +35,14 @@ const main = async () => {
           value: CmdAction.DownloadFollowings,
         },
         {
-          title: "download user timeline",
+          title: "download specific user timeline",
           description: "Download a specific user timeline",
           value: CmdAction.DownloadUserTimeline,
+        },
+        {
+          title: "download monitored user timeline",
+          description: "Download all monitored user timeline",
+          value: CmdAction.DownloadMonitoredTimeline,
         },
       ],
     },
@@ -57,6 +64,9 @@ const main = async () => {
       const id = resp.userIdForTimeline;
       if (!id) throw Error("Missing user id");
       return downloadTweets({ id, ignoreDuplicate: true });
+    case CmdAction.DownloadMonitoredTimeline:
+      for (const id of monitoredUserIds) await downloadTweets({ id, ignoreDuplicate: true });
+      return;
     default:
       throw Error("Invalid command");
   }

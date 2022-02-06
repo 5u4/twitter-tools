@@ -22,3 +22,9 @@ yarn prisma migrate dev
 ```bash
 yarn start
 ```
+
+## cli.
+
+```bash
+yarn cli --help
+```
