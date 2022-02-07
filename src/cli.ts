@@ -1,9 +1,9 @@
 import { boolean, command, flag, run } from "cmd-ts";
-import { downloadAllMedia } from "./cmd/downloadAllMedia";
-import { downloadFollowings } from "./cmd/downloadFollowings";
-import { downloadTweets } from "./cmd/downloadTweets";
+import { Action, runActions } from "./actions/action";
+import { downloadAllMedia } from "./actions/downloadAllMedia";
+import { downloadFollowings } from "./actions/downloadFollowings";
+import { makeDownloadTweetsAction } from "./actions/downloadTweets";
 import { monitoredUserIds } from "./config";
-import { logger } from "./loggings/logger";
 
 const cmd = command({
   name: "twitter-tools",
@@ -38,25 +38,17 @@ const cmd = command({
     }),
   },
   handler: async args => {
-    if (args.followings || args.all) {
-      logger.info("downloading followings");
-      await downloadFollowings();
-    }
+    const actions: Action[] = [];
 
-    if (args.monitored || args.all) {
-      logger.info("downloading monitored user tweets");
-      for (const id of monitoredUserIds) await downloadTweets({ id, ignoreDuplicate: true });
-    }
+    if (args.followings || args.all) actions.push(downloadFollowings);
+    if (args.monitored || args.all)
+      actions.push(
+        ...monitoredUserIds.map(id => makeDownloadTweetsAction({ id, ignoreDuplicate: true }))
+      );
+    if (args.tweets || args.all) actions.push(makeDownloadTweetsAction({}));
+    if (args.media || args.all) actions.push(downloadAllMedia);
 
-    if (args.tweets || args.all) {
-      logger.info("downloading timeline tweets");
-      await downloadTweets({});
-    }
-
-    if (args.media || args.all) {
-      logger.info("downloading media");
-      await downloadAllMedia();
-    }
+    await runActions(actions);
   },
 });
 

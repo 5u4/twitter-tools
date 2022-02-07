@@ -1,7 +1,8 @@
 import { prisma } from "../prisma/client";
 import { fetchFollowings } from "../utils/fetchFollowings";
+import { Action } from "./action";
 
-export const downloadFollowings = async () => {
+export const downloadFollowings: Action = async () => {
   // TODO Pagination
   const followings = await fetchFollowings({ include_user_entities: false, skip_status: true });
 

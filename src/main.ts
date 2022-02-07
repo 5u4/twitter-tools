@@ -1,7 +1,8 @@
 import prompts from "prompts";
-import { downloadAllMedia } from "./cmd/downloadAllMedia";
-import { downloadFollowings } from "./cmd/downloadFollowings";
-import { downloadTweets } from "./cmd/downloadTweets";
+import { Action, runActions } from "./actions/action";
+import { downloadAllMedia } from "./actions/downloadAllMedia";
+import { downloadFollowings } from "./actions/downloadFollowings";
+import { makeDownloadTweetsAction } from "./actions/downloadTweets";
 import { monitoredUserIds } from "./config";
 
 enum CmdAction {
@@ -53,23 +54,26 @@ const main = async () => {
     },
   ]);
 
-  switch (resp.cmd) {
-    case CmdAction.DownloadTweets:
-      return downloadTweets({});
-    case CmdAction.DownloadMedia:
-      return downloadAllMedia();
-    case CmdAction.DownloadFollowings:
-      return downloadFollowings();
-    case CmdAction.DownloadUserTimeline:
-      const id = resp.userIdForTimeline;
-      if (!id) throw Error("Missing user id");
-      return downloadTweets({ id, ignoreDuplicate: true });
-    case CmdAction.DownloadMonitoredTimeline:
-      for (const id of monitoredUserIds) await downloadTweets({ id, ignoreDuplicate: true });
-      return;
-    default:
-      throw Error("Invalid command");
-  }
+  const transformActions = (): Action[] => {
+    switch (resp.cmd) {
+      case CmdAction.DownloadTweets:
+        return [makeDownloadTweetsAction({})];
+      case CmdAction.DownloadMedia:
+        return [downloadAllMedia];
+      case CmdAction.DownloadFollowings:
+        return [downloadFollowings];
+      case CmdAction.DownloadUserTimeline:
+        const id = resp.userIdForTimeline;
+        if (!id) throw Error("Missing user id");
+        return [makeDownloadTweetsAction({ id, ignoreDuplicate: true })];
+      case CmdAction.DownloadMonitoredTimeline:
+        return monitoredUserIds.map(id => makeDownloadTweetsAction({ id, ignoreDuplicate: true }));
+      default:
+        throw Error("Invalid command");
+    }
+  };
+
+  runActions(transformActions());
 };
 
 main();

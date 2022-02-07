@@ -2,11 +2,12 @@ import ora from "ora";
 import { prisma } from "../prisma/client";
 import { saveMedia } from "../utils/saveMedia";
 import { sleep } from "../utils/sleep";
+import { Action } from "./action";
 
 const take = 10;
 const sleepMsPerDownload = 100;
 
-export const downloadAllMedia = async () => {
+export const downloadAllMedia: Action = async () => {
   let skip = 0;
   let count = 1;
   const total = await prisma.media.count();
